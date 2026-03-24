@@ -1,0 +1,118 @@
+*file-renamer.txt*    Rename files like text in Neovim
+
+INTRODUCTION                                             *file-renamer* {{{1
+Rename multiple files by editing their names directly in a Neovim buffer.
+
+This plugin displays files in the current directory and allows you to
+modify their names using normal editing commands. Once you're done,
+apply the changes to the filesystem.
+
+DESCRIPTION                                  *file-renamer-description* {{{1
+Renaming files individually is simple, but renaming many files at once,
+especially with common text transformations, can be tedious.
+
+file-renamer solves this by presenting a directory listing inside a buffer.
+You can freely edit filenames as text. When ready, apply the changes and
+all valid renames will be executed.
+
+Features:
+- Edit filenames directly in a buffer
+- Supports moving files into subdirectories (e.g. "file -> dir/file")
+- Automatically creates missing directories
+- Safe two-pass renaming (handles swaps like "a -> b", "b -> a")
+- Skips invalid or conflicting renames
+- Prevents overwriting existing files outside rename set
+- No temporary file leftovers on failure
+
+USAGE                                              *file-renamer-usage* {{{1
+:Renamer                                              *:Renamer*
+    Start renaming in the current working directory.
+
+Inside the buffer:
+
+- Edit filenames freely
+- Press <Enter> on a directory to enter it
+- Press <Enter> on "# ../" to go up one level
+
+To apply changes:
+
+:Ren
+    Perform the rename operation.
+
+The buffer will refresh automatically after renaming.
+
+RENAMING RULES                                *file-renamer-rules* {{{1
+- Lines starting with "#" are ignored
+- Directories must end with "/"
+- You must not change the number of entries
+- Duplicate target names are skipped
+- Existing files outside the rename set are not overwritten
+- Relative paths (e.g. "../dir/file") are supported
+- New directories are created automatically
+
+Examples:
+
+Swap files:
+    a -> b
+    b -> a
+
+Move into subdirectory:
+    file.txt -> folder/file.txt
+
+Move into parent directory:
+    file.txt -> ../file.txt
+
+Invalid rename (skipped):
+    a -> existing_file
+
+Invalid rename in parent directory (skipped):
+    a -> ../existing_file
+
+INSTALLATION                                  *file-renamer-install* {{{1
+Using lazy.nvim:
+
+    {
+      dir = "/path/to/file-renamer",
+      name = "file-renamer",
+      lazy = false,
+    }
+
+Then restart Neovim.
+
+KEY MAPPINGS                                *file-renamer-mappings* {{{1
+Default mappings inside the buffer:
+
+<CR>        Enter directory or go up ("# ../")
+
+You can define your own mappings for starting:
+
+    vim.keymap.set("n", "<leader>r", ":Renamer<CR>")
+
+BEHAVIOUR                                    *file-renamer-behaviour* {{{1
+file-renamer performs renaming in two phases:
+
+1. Files are renamed to temporary names
+2. Files are renamed to their final destinations
+
+If a rename fails:
+- It is skipped
+- The original file is restored
+- No temporary files are left behind
+
+This ensures safe and predictable behaviour.
+
+LIMITATIONS                                  *file-renamer-limitations* {{{1
+- Does not yet support hidden file toggling
+- No preview mode (:RenTest equivalent)
+- No original file split window
+- No per-file highlighting of modified names (planned)
+
+CHANGELOG                                    *file-renamer-changelog* {{{1
+1.0.0   - Initial release
+        - Basic rename buffer
+        - Directory navigation
+        - Two-pass safe renaming
+        - Swap support (a <-> b)
+        - Directory creation support
+        - Conflict detection and skipping
+        - Rollback on failure
