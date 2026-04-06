@@ -181,17 +181,21 @@ function M.perform_rename()
   end
 
   for _, op in ipairs(ops) do
-    local new_dir = vim.fn.fnamemodify(op.new_path, ":h")
-    if vim.fn.isdirectory(new_dir) == 0 then
-      vim.fn.mkdir(new_dir, "p")
-    end
-
     op.tmp = cwd .. "/" .. op.index .. "_RENAMER_TMP_"
 
     local ok = os.rename(op.old_path, op.tmp)
     if not ok then
       print("Failed temp rename:", op.old)
       op.failed = true
+    end
+  end
+
+  for _, op in ipairs(ops) do
+    if not op.failed then
+      local new_dir = vim.fn.fnamemodify(op.new_path, ":h")
+      if vim.fn.isdirectory(new_dir) == 0 then
+        vim.fn.mkdir(new_dir, "p")
+      end
     end
   end
 
