@@ -108,6 +108,7 @@ LIMITATIONS                                  *file-renamer-limitations* {{{1
 - No per-file highlighting of modified names (planned)
 
 CHANGELOG                                    *file-renamer-changelog* {{{1
+
 1.0.0   - Initial release
         - Basic rename buffer
         - Directory navigation
@@ -116,3 +117,7 @@ CHANGELOG                                    *file-renamer-changelog* {{{1
         - Directory creation support
         - Conflict detection and skipping
         - Rollback on failure
+
+1.0.1   - Fixed a -> a/a renaming bug
+
+1.1.0   - Added Icons

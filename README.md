@@ -12,17 +12,21 @@ it.
 ## Features
 
 - Edit filenames in a buffer
-- Navigate directories (`<CR>`)
-- Support for nested paths (`file -> dir/file`)
-- Automatically creates missing directories
-- Safe renaming (handles swaps like `a <-> b`)
-- Skips invalid or conflicting renames
+- Navigate directories (press `<CR>` on directory)
+- Support for nested renaming (for `file -> dir/file` a directory is created if it doesn't exist
+    already)
+- Safe renaming and directory creation (handles `a <-> b` and `a -> a/a`)
+- Skips invalid or conflicting renames (prohibits collision of file and directory names)
 
 ## Installation (lazy.nvim)
 
 ```lua
 return {
   "tiyn/file-renamer.nvim",
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+  },
+  cmd = { "Ren", "Renamer" },
 }
 ````
 
